@@ -149,7 +149,94 @@ class ExampleInstrumentedTest {
         return bd
     }
 
+    @Test
+
+    fun consegueAlterarTipos(){
+
+        val bd = getWritableDatabase()
+
+        val tipo = Tipos("Vinhos", "Tinto",0.75)
+        insereTipos(bd, tipo)
+
+        tipo.tipos = "Sumos"
+        val registoAlterado = TabelaTipos(bd).altera(tipo.toContentValues(),
+        "${BaseColumns._ID}=?",
+        arrayOf(tipo.id.toString()),
+        )
+
+        assertEquals(1,registoAlterado)
+    }
+
+    @Test
+
+    fun consegueAlterarBebidas(){
+
+        val bd = getWritableDatabase()
+
+        val tipo = Tipos("Vinhos", "Tinto",0.75)
+        insereTipos(bd, tipo)
+
+        val tipo2 = Tipos("Sumos", "Laranja",1.00)
+        insereTipos(bd, tipo2)
+
+        val Bebida1 = Bebidas("Papa Figos","Sim",tipo.id)
+        insereBebida(bd, Bebida1)
+
+        Bebida1.id_tipos = tipo2.id
+        Bebida1.marca = "Sumol"
+        Bebida1.TEOR_ALCOOLICO="Não"
 
 
+        val registoAlterado = TabelaTipos(bd).altera(Bebida1.toContentValues(),
+            "${BaseColumns._ID}=?",
+            arrayOf(tipo.id.toString()),
+        )
+
+        assertEquals(1,registoAlterado)
+
+    }
+
+    @Test
+
+    fun consegueEleminarTipos(){
+
+        val bd = getWritableDatabase()
+
+        val tipo = Tipos("Vinhos", "Tinto",0.75)
+        insereTipos(bd, tipo)
+
+
+        val registoEliminado = TabelaTipos(bd).elimina(
+            "${BaseColumns._ID}=?",
+            arrayOf(tipo.id.toString()),
+        )
+
+        assertEquals(1,registoEliminado)
+    }
+
+    @Test
+
+    fun consegueEliminarBebidas(){
+
+        val bd = getWritableDatabase()
+
+        val tipo = Tipos("Vinhos", "Tinto",0.75)
+        insereTipos(bd, tipo)
+
+
+        val Bebida1 = Bebidas("Papa Figos","Sim",tipo.id)
+        insereBebida(bd, Bebida1)
+
+
+
+
+        val registoEliminado = TabelaTipos(bd).elimina(
+            "${BaseColumns._ID}=?",
+            arrayOf(tipo.id.toString()),
+        )
+
+        assertEquals(1,registoEliminado)
+
+    }
 
 }
